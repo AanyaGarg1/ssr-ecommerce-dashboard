@@ -1,8 +1,6 @@
-# Server-Rendered E-commerce Product Management Dashboard
-
 # SSR E-Commerce Product Management Dashboard
 
-A high-performance, server-rendered E-commerce Admin Dashboard built with Next.js 15, Tailwind CSS v4, and MongoDB. 
+A high-performance, server-rendered E-commerce Admin Dashboard built with Next.js, Tailwind CSS, and MongoDB. 
 
 ## 🚀 Live Demo
 **Link:** [https://ssr-ecommerce-three.vercel.app](https://ssr-ecommerce-three.vercel.app)
@@ -10,7 +8,7 @@ A high-performance, server-rendered E-commerce Admin Dashboard built with Next.j
 ## 🛠 Tech Stack
 - **Framework:** Next.js 15 (App Router)
 - **Styling:** Tailwind CSS v4
-- **Database:** MongoDB (with Mock Fallback for Demo)
+- **Database:** MongoDB Atlas (with Mock Fallback for Demo)
 - **Authentication:** NextAuth.js
 - **Charts:** Recharts
 - **Forms:** React Hook Form + Zod
@@ -48,14 +46,5 @@ A high-performance, server-rendered E-commerce Admin Dashboard built with Next.j
 ## 🎥 Demo Video
 [Link to Demo Video]
 
-### Building for Production
-```bash
-npm run build
-npm start
-For testing purposes, you can use the following credentials if no admin exists in the database:
-*   **Email**: `admin@example.com`
-*   **Password**: `admin123`
-
-## Deployment
-Deployed on Vercel: [Insert Live Link Here]
-Demo Video: [Insert Video Link Here]
+---
+*Developed for Project Submission*
