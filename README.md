@@ -1,5 +1,5 @@
 # SSR E-Commerce Product Management Dashboard
-
+AANYA GARG
 A high-performance, server-rendered E-commerce Admin Dashboard built with Next.js, Tailwind CSS, and MongoDB. 
 
 ## 🚀 Live Demo
@@ -53,7 +53,7 @@ A high-performance, server-rendered E-commerce Admin Dashboard built with Next.j
    ```
 
 ## 🎥 Demo Video
-[Link to Demo Video]
+https://drive.google.com/file/d/1rZYGA4sN9R-y5gcQ5GBAIiPz8r9GDL4-/view?usp=sharing
 
 ---
-*Developed for Project Submission*
+*Developed for Project Submission by Aanya Garg*
