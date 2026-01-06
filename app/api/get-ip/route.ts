@@ -1,9 +1,9 @@
-export async function GET(req: Request) {
-    const forwarded = req.headers.get('x-forwarded-for');
-    const ip = forwarded ? forwarded.split(',')[0] : 'Unknown';
-
+export async function GET(request: Request) {
+    const ip =
+        request.headers.get("x-forwarded-for") ||
+        "unknown";
     return new Response(JSON.stringify({ ip }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
     });
 }
