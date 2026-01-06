@@ -48,11 +48,11 @@ export async function PUT(
         }
         return NextResponse.json({ success: true, data: product });
     } catch (error: any) {
-        // Mock Fallback
-        console.warn("PUT product: DB error, using mock fallback", error.message);
-        const product = updateMockProduct(id, body);
-        if (product) return NextResponse.json({ success: true, data: product });
-        return NextResponse.json({ success: false, error: 'Product not found in mock store' }, { status: 404 });
+        console.error("Product update failed:", error);
+        return NextResponse.json({
+            success: false,
+            error: "Database Error: " + error.message
+        }, { status: 500 });
     }
 }
 
@@ -68,11 +68,11 @@ export async function DELETE(
             return NextResponse.json({ success: false, error: 'Product not found' }, { status: 404 });
         }
         return NextResponse.json({ success: true, data: {} });
-    } catch (error) {
-        // Mock Fallback
-        if (deleteMockProduct(id)) {
-            return NextResponse.json({ success: true, data: {} });
-        }
-        return NextResponse.json({ success: false, error: 'Failed to delete product' }, { status: 400 });
+    } catch (error: any) {
+        console.error("Product deletion failed:", error);
+        return NextResponse.json({
+            success: false,
+            error: "Database Error: " + error.message
+        }, { status: 500 });
     }
 }

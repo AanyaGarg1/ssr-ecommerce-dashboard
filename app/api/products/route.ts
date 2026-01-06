@@ -30,13 +30,11 @@ export async function POST(request: Request) {
         const product = await Product.create(body);
         return NextResponse.json({ success: true, data: product }, { status: 201 });
     } catch (error: any) {
-        console.warn("Database connection failed, saving to mock data:", error.message);
-        // Fallback to mock data
-        try {
-            const product = addMockProduct(body);
-            return NextResponse.json({ success: true, data: product }, { status: 201 });
-        } catch (mockError) {
-            return NextResponse.json({ success: false, error: "Failed to save product" }, { status: 500 });
-        }
+        console.error("Product creation failed:", error);
+        return NextResponse.json({
+            success: false,
+            error: "Database Error: " + error.message,
+            hint: "Check if your IP is whitelisted in MongoDB Atlas and environment variables are set in Vercel."
+        }, { status: 500 });
     }
 }
