@@ -33,8 +33,7 @@ export async function POST(request: Request) {
         console.error("Product creation failed:", error);
         return NextResponse.json({
             success: false,
-            error: "Database Error: " + error.message,
-            hint: "Check if your IP is whitelisted in MongoDB Atlas and environment variables are set in Vercel."
+            message: "Database Error: " + error.message + ". Hint: Ensure Vercel IP is whitelisted in MongoDB Atlas."
         }, { status: 500 });
     }
 }

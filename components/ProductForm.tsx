@@ -65,8 +65,8 @@ export function ProductForm({ initialData, isEditing = false }: ProductFormProps
                 try {
                     const contentType = res.headers.get("content-type");
                     if (contentType && contentType.indexOf("application/json") !== -1) {
-                        const error = await res.json();
-                        errorMessage = error.message || errorMessage;
+                        const errorData = await res.json();
+                        errorMessage = errorData.message || errorData.error || errorMessage;
                     } else {
                         errorMessage = await res.text();
                     }

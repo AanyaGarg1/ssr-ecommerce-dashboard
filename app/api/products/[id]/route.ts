@@ -51,7 +51,7 @@ export async function PUT(
         console.error("Product update failed:", error);
         return NextResponse.json({
             success: false,
-            error: "Database Error: " + error.message
+            message: "Database Error: " + error.message
         }, { status: 500 });
     }
 }
@@ -72,7 +72,7 @@ export async function DELETE(
         console.error("Product deletion failed:", error);
         return NextResponse.json({
             success: false,
-            error: "Database Error: " + error.message
+            message: "Database Error: " + error.message
         }, { status: 500 });
     }
 }
