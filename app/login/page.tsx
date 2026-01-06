@@ -14,6 +14,8 @@ export default function LoginPage() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [debugIp, setDebugIp] = useState('');
+    const [debugLoading, setDebugLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,6 +39,19 @@ export default function LoginPage() {
             setError('Something went wrong');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const checkIp = async () => {
+        setDebugLoading(true);
+        try {
+            const res = await fetch('/api/get-ip');
+            const data = await res.json();
+            setDebugIp(data.ip);
+        } catch (err) {
+            setDebugIp('Error fetching IP');
+        } finally {
+            setDebugLoading(false);
         }
     };
 
@@ -105,8 +120,15 @@ export default function LoginPage() {
                         </Button>
                     </CardFooter>
                 </form>
-                <div className="p-4 text-center text-xs text-gray-400 bg-gray-50/50 rounded-b-xl border-t border-gray-100">
-                    Demo Credentials: admin@example.com / AdmiN_7788!@#
+                <div className="p-4 text-center text-xs text-gray-400 bg-gray-50/50 rounded-b-xl border-t border-gray-100 flex flex-col gap-2">
+                    <div>Demo Credentials: admin@example.com / AdmiN_7788!@#</div>
+                    <button
+                        type="button"
+                        onClick={checkIp}
+                        className="text-[10px] hover:underline cursor-pointer"
+                    >
+                        {debugLoading ? 'Checking...' : debugIp ? `Your IP: ${debugIp}` : 'Debug: Show Vercel Outbound IP'}
+                    </button>
                 </div>
             </Card>
         </div>
