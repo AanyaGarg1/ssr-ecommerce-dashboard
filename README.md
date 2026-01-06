@@ -5,7 +5,7 @@
 A high-performance, server-rendered E-commerce Admin Dashboard built with Next.js 15, Tailwind CSS v4, and MongoDB. 
 
 ## 🚀 Live Demo
-**Link:** [Your Deployment URL will go here]
+**Link:** [https://ssr-ecommerce-three.vercel.app](https://ssr-ecommerce-three.vercel.app)
 
 ## 🛠 Tech Stack
 - **Framework:** Next.js 15 (App Router)
