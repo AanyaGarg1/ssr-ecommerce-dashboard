@@ -1,14 +1,9 @@
-import { NextResponse } from 'next/server';
-
-export const dynamic = 'force-dynamic';
-
-export async function GET(request: Request) {
-    const forwarded = request.headers.get('x-forwarded-for');
+export async function GET(req: Request) {
+    const forwarded = req.headers.get('x-forwarded-for');
     const ip = forwarded ? forwarded.split(',')[0] : 'Unknown';
 
-    return NextResponse.json({
-        ip,
-        message: "Vercel Outbound IP Checker",
-        now: new Date().toISOString()
+    return new Response(JSON.stringify({ ip }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
     });
 }
