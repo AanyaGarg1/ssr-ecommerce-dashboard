@@ -13,8 +13,11 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
+                const email = credentials?.email?.toLowerCase().trim();
+                const password = credentials?.password?.trim();
+
                 // 1. Check for hardcoded Demo Admin (Before DB connection to allow access even if DB is down)
-                if (credentials?.email === "admin@example.com" && credentials?.password === "AdmiN_7788!@#") {
+                if (email === "admin@example.com" && password === "AdmiN_7788!@#") {
                     return {
                         id: "demo-admin",
                         name: "Demo Admin",
@@ -31,17 +34,17 @@ export const authOptions: NextAuthOptions = {
                 }
 
                 // 2. Check Database
-                if (!credentials?.email || !credentials?.password) {
+                if (!email || !password) {
                     return null;
                 }
 
-                const user = await User.findOne({ email: credentials.email }).select('+password');
+                const user = await User.findOne({ email }).select('+password');
 
                 if (!user) {
                     return null;
                 }
 
-                const isMatch = await bcrypt.compare(credentials.password, user.password as string);
+                const isMatch = await bcrypt.compare(password, user.password as string);
 
                 if (!isMatch) {
                     return null;
