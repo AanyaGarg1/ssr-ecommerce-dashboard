@@ -106,7 +106,7 @@ export default function LoginPage() {
                     </CardFooter>
                 </form>
                 <div className="p-4 text-center text-xs text-gray-400 bg-gray-50/50 rounded-b-xl border-t border-gray-100">
-                    Demo Credentials: admin@example.com / admin123
+                    Demo Credentials: admin@example.com / AdmiN_7788!@#
                 </div>
             </Card>
         </div>

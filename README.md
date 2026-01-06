@@ -25,7 +25,7 @@ A high-performance, server-rendered E-commerce Admin Dashboard built with Next.j
 
 ## 🔑 Admin Credentials (Demo)
 - **Email:** `admin@example.com`
-- **Password:** `admin123`
+- **Password:** `AdmiN_7788!@#`
 
 ## ⚙️ Setup Instructions
 1. **Clone the repository**

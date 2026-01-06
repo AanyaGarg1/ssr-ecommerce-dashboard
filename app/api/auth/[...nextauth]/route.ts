@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 // 1. Check for hardcoded Demo Admin (Before DB connection to allow access even if DB is down)
-                if (credentials?.email === "admin@example.com" && credentials?.password === "admin123") {
+                if (credentials?.email === "admin@example.com" && credentials?.password === "AdmiN_7788!@#") {
                     return {
                         id: "demo-admin",
                         name: "Demo Admin",
@@ -27,7 +27,6 @@ export const authOptions: NextAuthOptions = {
                     await connectDB();
                 } catch (error) {
                     console.error("Database connection failed:", error);
-                    // If DB matches failed but we checked hardcoded above, we can just return null here
                     return null;
                 }
 
