@@ -1,6 +1,6 @@
-# SSR E-Commerce Product Management Dashboard
-AANYA GARG
-A high-performance, server-rendered E-commerce Admin Dashboard built with Next.js, Tailwind CSS, and MongoDB. 
+# Aura Admin | Premium SSR E-Commerce Dashboard
+**Aanya Garg**
+A high-performance, next-generation E-commerce Admin Dashboard featuring a premium glassmorphic design system. Built with Next.js 15, Tailwind CSS v4, and MongoDB.
 
 ## 🚀 Live Demo
 **Link:** [https://ssr-ecommerce-three.vercel.app](https://ssr-ecommerce-three.vercel.app)
