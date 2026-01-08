@@ -25,9 +25,8 @@ const sidebarItems = [
     },
     {
         title: 'Reports',
-        href: '#',
+        href: '/reports',
         icon: BarChart3,
-        disabled: true,
     }
 ];
 
@@ -63,12 +62,12 @@ export function Sidebar() {
                             return (
                                 <Link
                                     key={index}
-                                    href={item.disabled ? '#' : item.href}
+                                    href={item.href}
                                     className={cn(
                                         "group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 relative",
                                         isActive
                                             ? "text-indigo-600 bg-indigo-50/50"
-                                            : item.disabled ? "text-slate-300 cursor-not-allowed" : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
+                                            : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
                                     )}
                                 >
                                     <Icon className={cn(
