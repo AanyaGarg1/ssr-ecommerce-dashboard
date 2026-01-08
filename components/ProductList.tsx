@@ -7,6 +7,20 @@ import { Edit, Trash2, MoreVertical, Search, Filter, ArrowUpDown, ChevronRight, 
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const getFallbackImage = (name: string, category: string) => {
+    const n = name.toLowerCase();
+    const c = category.toLowerCase();
+
+    if (n.includes('shoe') || c.includes('footwear')) return 'https://images.unsplash.com/photo-1542291026-7eec264c27ff';
+    if (n.includes('watch') || c.includes('wearable')) return 'https://images.unsplash.com/photo-1546868871-70c122469d8b';
+    if (n.includes('laptop') || n.includes('asus') || c.includes('computer')) return 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6';
+    if (n.includes('speaker') || c.includes('audio') || c.includes('gadget')) return 'https://images.unsplash.com/photo-1589003077984-894e133dabab';
+    if (n.includes('mouse')) return 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf';
+    if (n.includes('phone') || n.includes('iphone')) return 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9';
+
+    return `https://source.unsplash.com/featured/?${encodeURIComponent(category || name)}`;
+};
+
 export function ProductList({ initialProducts }: { initialProducts: any[] }) {
     const router = useRouter();
     const [isDeleting, setIsDeleting] = useState<string | null>(null);
@@ -91,84 +105,81 @@ export function ProductList({ initialProducts }: { initialProducts: any[] }) {
                             </thead>
                             <tbody className="divide-y divide-slate-50">
                                 <AnimatePresence mode="popLayout">
-                                    {filteredProducts.map((product) => (
-                                        <motion.tr
-                                            layout
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            key={product._id}
-                                            className="hover:bg-indigo-50/30 transition-colors group"
-                                        >
-                                            <td className="px-8 py-5">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-14 h-14 rounded-2xl bg-slate-100 overflow-hidden border border-slate-200 group-hover:scale-105 transition-transform duration-300">
-                                                        {product.images?.[0] ? (
-                                                            <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <div className="w-full h-full flex items-center justify-center bg-indigo-50 text-indigo-600 font-bold">
-                                                                {product.name[0]}
-                                                            </div>
-                                                        )}
+                                    {filteredProducts.map((product) => {
+                                        const displayImage = product.images?.[0] || getFallbackImage(product.name, product.category);
+                                        return (
+                                            <motion.tr
+                                                layout
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                exit={{ opacity: 0 }}
+                                                key={product._id}
+                                                className="hover:bg-indigo-50/30 transition-colors group"
+                                            >
+                                                <td className="px-8 py-5">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-14 h-14 rounded-2xl bg-slate-100 overflow-hidden border border-slate-200 group-hover:scale-105 transition-transform duration-300">
+                                                            <img src={displayImage} alt={product.name} className="w-full h-full object-cover" />
+                                                        </div>
+                                                        <div className="flex flex-col">
+                                                            <span className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{product.name}</span>
+                                                            <span className="text-xs text-slate-400 font-medium font-mono">ID: {product._id.substring(0, 8)}...</span>
+                                                        </div>
                                                     </div>
-                                                    <div className="flex flex-col">
-                                                        <span className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">{product.name}</span>
-                                                        <span className="text-xs text-slate-400 font-medium font-mono">ID: {product._id.substring(0, 8)}...</span>
+                                                </td>
+                                                <td className="px-6 py-5 text-center">
+                                                    <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider bg-slate-100 text-slate-600 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
+                                                        {product.category}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-5">
+                                                    <div className="flex flex-col font-jakarta">
+                                                        <span className="font-black text-slate-900">${product.price.toLocaleString()}</span>
+                                                        <span className="text-[10px] text-slate-400 font-bold uppercase">USD per unit</span>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-5 text-center">
-                                                <span className="inline-flex items-center px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-wider bg-slate-100 text-slate-600 group-hover:bg-indigo-100 group-hover:text-indigo-600 transition-colors">
-                                                    {product.category}
-                                                </span>
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                <div className="flex flex-col font-jakarta">
-                                                    <span className="font-black text-slate-900">${product.price.toLocaleString()}</span>
-                                                    <span className="text-[10px] text-slate-400 font-bold uppercase">USD per unit</span>
-                                                </div>
-                                            </td>
-                                            <td className="px-6 py-5">
-                                                <div className="flex flex-col gap-1.5">
-                                                    <div className="flex items-center justify-between text-[11px] font-bold">
-                                                        <span className={product.stock < 10 ? "text-rose-500" : "text-emerald-500"}>
-                                                            {product.stock} Units
-                                                        </span>
-                                                        <span className="text-slate-400">{Math.min(100, (product.stock / 50) * 100).toFixed(0)}%</span>
+                                                </td>
+                                                <td className="px-6 py-5">
+                                                    <div className="flex flex-col gap-1.5">
+                                                        <div className="flex items-center justify-between text-[11px] font-bold">
+                                                            <span className={product.stock < 10 ? "text-rose-500" : "text-emerald-500"}>
+                                                                {product.stock} Units
+                                                            </span>
+                                                            <span className="text-slate-400">{Math.min(100, (product.stock / 50) * 100).toFixed(0)}%</span>
+                                                        </div>
+                                                        <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                            <motion.div
+                                                                initial={{ width: 0 }}
+                                                                animate={{ width: `${Math.min(100, (product.stock / 50) * 100)}%` }}
+                                                                transition={{ duration: 1, ease: "easeOut" }}
+                                                                className={cn(
+                                                                    "h-full rounded-full transition-all duration-500",
+                                                                    product.stock < 10 ? "bg-rose-500" : "bg-emerald-500"
+                                                                )}
+                                                            />
+                                                        </div>
                                                     </div>
-                                                    <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                                                        <motion.div
-                                                            initial={{ width: 0 }}
-                                                            animate={{ width: `${Math.min(100, (product.stock / 50) * 100)}%` }}
-                                                            transition={{ duration: 1, ease: "easeOut" }}
-                                                            className={cn(
-                                                                "h-full rounded-full transition-all duration-500",
-                                                                product.stock < 10 ? "bg-rose-500" : "bg-emerald-500"
-                                                            )}
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td className="px-8 py-5 text-right">
-                                                <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <Link href={`/products/${product._id}/edit`}>
-                                                        <Button variant="ghost" size="sm" className="h-10 w-10 p-0 rounded-xl bg-slate-50 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-100">
-                                                            <Edit className="h-4 w-4" />
+                                                </td>
+                                                <td className="px-8 py-5 text-right">
+                                                    <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <Link href={`/products/${product._id}/edit`}>
+                                                            <Button variant="ghost" size="sm" className="h-10 w-10 p-0 rounded-xl bg-slate-50 text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-100">
+                                                                <Edit className="h-4 w-4" />
+                                                            </Button>
+                                                        </Link>
+                                                        <Button
+                                                            variant="ghost"
+                                                            size="sm"
+                                                            className="h-10 w-10 p-0 rounded-xl bg-slate-50 text-rose-500 hover:bg-rose-50 hover:text-rose-600 border border-slate-100"
+                                                            onClick={() => handleDelete(product._id)}
+                                                            disabled={isDeleting === product._id}
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
                                                         </Button>
-                                                    </Link>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="h-10 w-10 p-0 rounded-xl bg-slate-50 text-rose-500 hover:bg-rose-50 hover:text-rose-600 border border-slate-100"
-                                                        onClick={() => handleDelete(product._id)}
-                                                        disabled={isDeleting === product._id}
-                                                    >
-                                                        <Trash2 className="h-4 w-4" />
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                        </motion.tr>
-                                    ))}
+                                                    </div>
+                                                </td>
+                                            </motion.tr>
+                                        );
+                                    })}
                                 </AnimatePresence>
                                 {filteredProducts.length === 0 && (
                                     <tr>
@@ -182,72 +193,69 @@ export function ProductList({ initialProducts }: { initialProducts: any[] }) {
             ) : (
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                     <AnimatePresence mode="popLayout">
-                        {filteredProducts.map((product) => (
-                            <motion.div
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
-                                key={product._id}
-                                className="group relative bg-white rounded-[2rem] p-4 border border-slate-200/60 shadow-sm hover:shadow-xl transition-all duration-500 group"
-                            >
-                                <div className="relative aspect-square rounded-[1.5rem] bg-slate-100 overflow-hidden mb-6">
-                                    {product.images?.[0] ? (
-                                        <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                    ) : (
-                                        <div className="w-full h-full flex items-center justify-center bg-indigo-50 text-indigo-600 font-black text-2xl">
-                                            {product.name[0]}
+                        {filteredProducts.map((product) => {
+                            const displayImage = product.images?.[0] || getFallbackImage(product.name, product.category);
+                            return (
+                                <motion.div
+                                    layout
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    key={product._id}
+                                    className="group relative bg-white rounded-[2rem] p-4 border border-slate-200/60 shadow-sm hover:shadow-xl transition-all duration-500 group"
+                                >
+                                    <div className="relative aspect-square rounded-[1.5rem] bg-slate-100 overflow-hidden mb-6">
+                                        <img src={displayImage} alt={product.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                        <div className="absolute top-3 right-3 flex flex-col gap-2">
+                                            <span className={cn(
+                                                "px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-lg",
+                                                product.stock < 10 ? "bg-rose-500/90 text-white" : "bg-emerald-500/90 text-white"
+                                            )}>
+                                                {product.stock} in stock
+                                            </span>
                                         </div>
-                                    )}
-                                    <div className="absolute top-3 right-3 flex flex-col gap-2">
-                                        <span className={cn(
-                                            "px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider backdrop-blur-md shadow-lg",
-                                            product.stock < 10 ? "bg-rose-500/90 text-white" : "bg-emerald-500/90 text-white"
-                                        )}>
-                                            {product.stock} in stock
-                                        </span>
-                                    </div>
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
-                                        <Link href={`/products/${product._id}/edit`}>
-                                            <Button size="icon" className="rounded-2xl bg-white text-slate-900 hover:bg-white/90 scale-90 group-hover:scale-100 transition-all duration-300">
-                                                <Edit className="h-5 w-5" />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3">
+                                            <Link href={`/products/${product._id}/edit`}>
+                                                <Button size="icon" className="rounded-2xl bg-white text-slate-900 hover:bg-white/90 scale-90 group-hover:scale-100 transition-all duration-300">
+                                                    <Edit className="h-5 w-5" />
+                                                </Button>
+                                            </Link>
+                                            <Button
+                                                size="icon"
+                                                variant="destructive"
+                                                className="rounded-2xl scale-90 group-hover:scale-100 transition-all duration-300"
+                                                onClick={() => handleDelete(product._id)}
+                                                disabled={isDeleting === product._id}
+                                            >
+                                                <Trash2 className="h-5 w-5" />
                                             </Button>
-                                        </Link>
-                                        <Button
-                                            size="icon"
-                                            variant="destructive"
-                                            className="rounded-2xl scale-90 group-hover:scale-100 transition-all duration-300"
-                                            onClick={() => handleDelete(product._id)}
-                                            disabled={isDeleting === product._id}
-                                        >
-                                            <Trash2 className="h-5 w-5" />
-                                        </Button>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div className="px-2 space-y-3">
-                                    <div className="flex items-start justify-between gap-2">
-                                        <div>
-                                            <h4 className="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors line-clamp-1">{product.name}</h4>
-                                            <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">{product.category}</p>
+                                    <div className="px-2 space-y-3">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div>
+                                                <h4 className="font-bold text-slate-900 text-lg group-hover:text-indigo-600 transition-colors line-clamp-1">{product.name}</h4>
+                                                <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">{product.category}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-end justify-between">
+                                            <div className="font-jakarta">
+                                                <p className="text-[10px] font-bold text-slate-400 leading-none">Price</p>
+                                                <p className="text-2xl font-black text-slate-900">${product.price.toLocaleString()}</p>
+                                            </div>
+                                            <div className="flex -space-x-1">
+                                                {[...Array(3)].map((_, i) => (
+                                                    <div key={i} className="w-6 h-6 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[8px] font-bold text-slate-500">
+                                                        +{i * 2}
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="flex items-end justify-between">
-                                        <div className="font-jakarta">
-                                            <p className="text-[10px] font-bold text-slate-400 leading-none">Price</p>
-                                            <p className="text-2xl font-black text-slate-900">${product.price.toLocaleString()}</p>
-                                        </div>
-                                        <div className="flex -space-x-1">
-                                            {[...Array(3)].map((_, i) => (
-                                                <div key={i} className="w-6 h-6 rounded-full border-2 border-white bg-slate-100 flex items-center justify-center text-[8px] font-bold text-slate-500">
-                                                    +{i * 2}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
+                                </motion.div>
+                            );
+                        })}
                     </AnimatePresence>
                 </div>
             )}

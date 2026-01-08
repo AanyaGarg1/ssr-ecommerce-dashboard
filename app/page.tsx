@@ -19,6 +19,18 @@ async function getProducts() {
 
 export const revalidate = 0;
 
+const getFallbackImage = (name: string, category: string) => {
+  const n = name.toLowerCase();
+  const c = category.toLowerCase();
+  if (n.includes('shoe') || c.includes('footwear')) return 'https://images.unsplash.com/photo-1542291026-7eec264c27ff';
+  if (n.includes('watch') || c.includes('wearable')) return 'https://images.unsplash.com/photo-1546868871-70c122469d8b';
+  if (n.includes('laptop') || n.includes('asus') || c.includes('computer')) return 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6';
+  if (n.includes('speaker') || c.includes('audio') || c.includes('gadget')) return 'https://images.unsplash.com/photo-1589003077984-894e133dabab';
+  if (n.includes('mouse')) return 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf';
+  if (n.includes('phone') || n.includes('iphone')) return 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9';
+  return `https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=200&h=200`; // Generic product
+};
+
 export default async function DashboardPage() {
   const products = await getProducts();
   const totalProducts = products.length
@@ -36,9 +48,15 @@ export default async function DashboardPage() {
           <h1 className="text-4xl font-black tracking-tight text-slate-900 font-jakarta">
             Welcome back, <span className="text-gradient">Admin</span>
           </h1>
-          <p className="text-slate-500 font-medium mt-1">
-            Here's your business overview for today.
-          </p>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+            </div>
+            <p className="text-slate-500 font-medium text-sm">
+              <span className="font-bold text-slate-900">42 users</span> currently browsing your store.
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="flex -space-x-2 mr-2">
@@ -91,32 +109,29 @@ export default async function DashboardPage() {
             </div>
           </div>
           <div className="space-y-6">
-            {topSellers.map((product: any) => (
-              <div key={product._id} className="flex items-center gap-4 group cursor-pointer">
-                <div className="w-14 h-14 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:scale-105 transition-transform">
-                  {product.images?.[0] ? (
-                    <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-indigo-50 text-indigo-600 font-bold">
-                      {product.name[0]}
+            {topSellers.map((product: any) => {
+              const displayImage = product.images?.[0] || getFallbackImage(product.name, product.category);
+              return (
+                <div key={product._id} className="flex items-center gap-4 group cursor-pointer">
+                  <div className="w-14 h-14 rounded-2xl bg-slate-50 overflow-hidden border border-slate-100 group-hover:scale-105 transition-transform duration-300">
+                    <img src={displayImage} alt={product.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{product.name}</h4>
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <div className="flex items-center text-amber-500">
+                        <span className="text-[10px] font-black">{product.sales || 0} Sales</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{product.category}</span>
                     </div>
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-bold text-slate-900 truncate group-hover:text-indigo-600 transition-colors uppercase tracking-tight">{product.name}</h4>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <div className="flex items-center text-amber-500">
-                      <span className="text-[10px] font-black">{product.sales || 0} Sales</span>
-                    </div>
-                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{product.category}</span>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-black text-slate-900">${product.price}</p>
+                    <p className="text-[10px] text-emerald-500 font-bold">+{Math.floor(Math.random() * 20) + 5}%</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm font-black text-slate-900">${product.price}</p>
-                  <p className="text-[10px] text-emerald-500 font-bold">+{Math.floor(Math.random() * 20) + 5}%</p>
-                </div>
-              </div>
-            ))}
+              );
+            })}
             {topSellers.length === 0 && (
               <div className="text-center py-10 text-slate-400">
                 <Activity className="h-8 w-8 mx-auto mb-2 opacity-20" />
