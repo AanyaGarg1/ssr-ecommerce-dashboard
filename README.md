@@ -20,6 +20,7 @@ A high-performance, next-generation E-commerce Admin Dashboard featuring a premi
 - **Multi-Step Product CRUD:** Effortlessly Create, Read, Update, and Delete inventory items using a high-end multi-step wizard.
 - **Secure Image Upload:** Direct integration with Cloudinary for scalable image management.
 - **Data Visualization:** Interactive charts showing stock levels and inventory value.
+- **Recent Orders Dashboard:** Dynamic, animated order tracking with color-coded status indicators and real-time updates.
 - **Responsive Design:** Premium Glassmorphism UI that works on all devices.
 
 ## 🔑 Admin Credentials (Demo)
