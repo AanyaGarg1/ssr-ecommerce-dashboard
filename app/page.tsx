@@ -1,11 +1,13 @@
 import { Card } from "@/components/ui/Card"
 import { Package, TrendingUp, AlertTriangle, IndianRupee, ArrowUpRight, ArrowDownRight, Activity, ShoppingCart, Star } from "lucide-react"
 import { ProductChart } from "@/components/ProductChart"
-import { getMockProducts } from "@/lib/mock-db"
+import { RecentOrders } from "@/components/RecentOrders"
+import { getMockProducts, getMockOrders } from "@/lib/mock-db"
 import { Button } from "@/components/ui/Button"
 import Link from "next/link"
 import connectDB from "@/lib/db";
 import Product from "@/models/Product";
+import Order from "@/models/Order";
 
 async function getProducts() {
   try {
@@ -14,6 +16,16 @@ async function getProducts() {
     return JSON.parse(JSON.stringify(products));
   } catch (error) {
     return getMockProducts();
+  }
+}
+
+async function getOrders() {
+  try {
+    await connectDB();
+    const orders = await Order.find({}).sort({ createdAt: -1 }).limit(8).lean();
+    return JSON.parse(JSON.stringify(orders));
+  } catch (error) {
+    return getMockOrders();
   }
 }
 
@@ -33,6 +45,7 @@ const getFallbackImage = (name: string, category: string) => {
 
 export default async function DashboardPage() {
   const products = await getProducts();
+  const orders = await getOrders();
   const totalProducts = products.length
   const totalStock = products.reduce((acc: number, p: any) => acc + (p.stock || 0), 0)
   const totalValue = products.reduce((acc: number, p: any) => acc + ((p.price || 0) * (p.stock || 0)), 0)
@@ -145,6 +158,11 @@ export default async function DashboardPage() {
             </Button>
           </Link>
         </Card>
+      </div>
+
+      {/* Recent Orders Section */}
+      <div className="mt-8">
+        <RecentOrders orders={orders} />
       </div>
     </div>
   )

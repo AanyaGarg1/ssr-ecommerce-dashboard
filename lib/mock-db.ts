@@ -3,6 +3,7 @@
 // Declare the global type to avoid TS errors
 declare global {
     var _mockProducts: any[] | undefined;
+    var _mockOrders: any[] | undefined;
 }
 
 // Initialize the global store if it doesn't exist
@@ -71,6 +72,159 @@ if (!global._mockProducts) {
     ];
 }
 
+// Initialize mock orders
+if (!global._mockOrders) {
+    const now = new Date();
+    const getRandomDate = (daysAgo: number) => {
+        const date = new Date(now);
+        date.setDate(date.getDate() - daysAgo);
+        date.setHours(Math.floor(Math.random() * 24), Math.floor(Math.random() * 60));
+        return date;
+    };
+
+    global._mockOrders = [
+        {
+            _id: 'ord-001',
+            orderId: 'ORD-1767757582476-925',
+            customer: {
+                name: 'Anjali Mehra',
+                email: 'anjali.mehra@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=1',
+            },
+            items: [
+                { name: 'Nike Air Max 270', quantity: 1, price: 12900 }
+            ],
+            totalAmount: 12989,
+            status: 'completed',
+            paymentMethod: 'upi',
+            createdAt: getRandomDate(0),
+            updatedAt: getRandomDate(0),
+        },
+        {
+            _id: 'ord-002',
+            orderId: 'ORD-1767756912579-706',
+            customer: {
+                name: 'Riya Jain',
+                email: 'riya.jain@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=5',
+            },
+            items: [
+                { name: 'Apple Watch Series 9', quantity: 1, price: 45900 },
+                { name: 'Logitech G502 Hero', quantity: 1, price: 5495 }
+            ],
+            totalAmount: 13389,
+            status: 'cancelled',
+            paymentMethod: 'credit_card',
+            createdAt: getRandomDate(0),
+            updatedAt: getRandomDate(0),
+        },
+        {
+            _id: 'ord-003',
+            orderId: 'ORD-1767754951538-266',
+            customer: {
+                name: 'Nina malik',
+                email: 'nina.malik@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=9',
+            },
+            items: [
+                { name: 'ASUS VivoBook 15', quantity: 1, price: 107190 },
+                { name: 'Logitech G502 Hero', quantity: 2, price: 5495 }
+            ],
+            totalAmount: 126400,
+            status: 'completed',
+            paymentMethod: 'net_banking',
+            createdAt: getRandomDate(0),
+            updatedAt: getRandomDate(0),
+        },
+        {
+            _id: 'ord-004',
+            orderId: 'ORD-1767754783910-959',
+            customer: {
+                name: 'Meher Gupta',
+                email: 'meher.gupta@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=16',
+            },
+            items: [
+                { name: 'Bose Smart Speaker 500', quantity: 2, price: 44900 }
+            ],
+            totalAmount: 959,
+            status: 'completed',
+            paymentMethod: 'upi',
+            createdAt: getRandomDate(0),
+            updatedAt: getRandomDate(0),
+        },
+        {
+            _id: 'ord-005',
+            orderId: 'ORD-1767683986849-106',
+            customer: {
+                name: 'Vikram Nair',
+                email: 'vikram.nair@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=12',
+            },
+            items: [
+                { name: 'Nike Air Max 270', quantity: 2, price: 12900 },
+                { name: 'Apple Watch Series 9', quantity: 1, price: 45900 }
+            ],
+            totalAmount: 38499,
+            status: 'completed',
+            paymentMethod: 'debit_card',
+            createdAt: getRandomDate(1),
+            updatedAt: getRandomDate(1),
+        },
+        {
+            _id: 'ord-006',
+            orderId: 'ORD-1767682156234-442',
+            customer: {
+                name: 'Priya Sharma',
+                email: 'priya.sharma@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=24',
+            },
+            items: [
+                { name: 'Bose Smart Speaker 500', quantity: 1, price: 44900 }
+            ],
+            totalAmount: 44900,
+            status: 'shipped',
+            paymentMethod: 'credit_card',
+            createdAt: getRandomDate(1),
+            updatedAt: getRandomDate(0),
+        },
+        {
+            _id: 'ord-007',
+            orderId: 'ORD-1767598234567-123',
+            customer: {
+                name: 'Arjun Patel',
+                email: 'arjun.patel@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=33',
+            },
+            items: [
+                { name: 'ASUS VivoBook 15', quantity: 1, price: 107190 }
+            ],
+            totalAmount: 107190,
+            status: 'processing',
+            paymentMethod: 'upi',
+            createdAt: getRandomDate(2),
+            updatedAt: getRandomDate(1),
+        },
+        {
+            _id: 'ord-008',
+            orderId: 'ORD-1767512345678-890',
+            customer: {
+                name: 'Kavya Reddy',
+                email: 'kavya.reddy@example.com',
+                avatar: 'https://i.pravatar.cc/100?img=47',
+            },
+            items: [
+                { name: 'Logitech G502 Hero', quantity: 3, price: 5495 }
+            ],
+            totalAmount: 16485,
+            status: 'delivered',
+            paymentMethod: 'cash_on_delivery',
+            createdAt: getRandomDate(3),
+            updatedAt: getRandomDate(2),
+        },
+    ];
+}
+
 export const getMockProducts = () => {
     return global._mockProducts || [];
 };
@@ -114,3 +268,39 @@ export const getMockProduct = (id: string) => {
 };
 
 export const mockProducts = global._mockProducts!;
+
+// Order helper functions
+export const getMockOrders = () => {
+    return global._mockOrders || [];
+};
+
+export const getMockOrder = (id: string) => {
+    return global._mockOrders?.find(o => o._id === id || o.orderId === id);
+};
+
+export const addMockOrder = (order: any) => {
+    const newOrder = {
+        ...order,
+        _id: 'ord-' + Date.now().toString(),
+        orderId: `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    };
+    if (global._mockOrders) {
+        global._mockOrders.unshift(newOrder);
+    }
+    return newOrder;
+};
+
+export const updateMockOrder = (id: string, updates: any) => {
+    if (!global._mockOrders) return null;
+    const index = global._mockOrders.findIndex(o => o._id === id || o.orderId === id);
+    if (index !== -1) {
+        const { _id, orderId, ...rest } = updates;
+        global._mockOrders[index] = { ...global._mockOrders[index], ...rest, updatedAt: new Date() };
+        return global._mockOrders[index];
+    }
+    return null;
+};
+
+export const mockOrders = global._mockOrders!;
